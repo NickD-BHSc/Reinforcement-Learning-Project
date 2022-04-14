@@ -20,7 +20,7 @@ class State(object):
 class Terminal(State):
 
     def __init__(self, cost):
-        super(cost)
+        super().__init__(cost)
         self.actions = ["EXIT"]    
         
     #toString function

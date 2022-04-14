@@ -2,7 +2,6 @@ import sys
 import re
 from states import State, Boulder, Terminal
 
-
 def parseFile():    
     fileName = "gridFiles/gridConf.txt"
     if len(sys.argv) > 1:
@@ -19,14 +18,13 @@ def parseFile():
     ## START PARSING
     line = file.readline().split('=') # x=?
     x = int(line[1])
-    print(line)
     line = file.readline().split('=') # y=?
     y = int(line[1])
-    line = file.readline().split('=') # Terminal=?
-    terminalString = line[1]
-    line = file.readline().split('=') # Boulder=?
+    line = file.readline() # Terminal=?
+    terminalString = line
+    line = file.readline() # Boulder=?
     boulderString = line[1]
-    line = file.readline().split('=') # RobotStartState=?
+    line = file.readline() # RobotStartState=?
     robotStartString = line[1]
     line = file.readline().split('=') # K=?
     K = int(line[1])
@@ -41,17 +39,22 @@ def parseFile():
     line = file.readline().split('=') # transitionCost=?
     transitionCost = float(line[1])
 
-    grid = [[State(2)] * x] * y  ## create a grid of size x y filled with empty States
+    grid = [ [State(transitionCost)]*y for i in range(x)]  ## create a grid of size x y filled with empty States
 
     #Set up terminals
-    print (re.findall(r'(?<=\{)(.*?)(?=\})', terminalString))
-    terminalString = terminalString.split('{')
+    terminalString = terminalString[10:]
+    terminalString = re.findall(r'(?<=\{)(.*?)(?=\})', terminalString)
+    
     for s in terminalString:
-        s = s.split('=')[1]
-        s = s.replace('{', '')
-        s = s.splot
+        s = s.split(',')
+        xPos = int(s[0])
+        yPos = int(s[1])
+        cost = int(s[2])
+        grid[xPos][yPos] = Terminal(cost)
+        print(s)
 
 
+    print(str(x) + ' ' + str(y) )
     print("heres the grid")
     print(grid)
 
