@@ -23,7 +23,7 @@ def parseFile():
     line = file.readline() # Terminal=?
     terminalString = line
     line = file.readline() # Boulder=?
-    boulderString = line[1]
+    boulderString = line
     line = file.readline() # RobotStartState=?
     robotStartString = line[1]
     line = file.readline().split('=') # K=?
@@ -51,10 +51,19 @@ def parseFile():
         yPos = int(s[1])
         cost = int(s[2])
         grid[xPos][yPos] = Terminal(cost)
+
+    #Set up boulders
+    boulderString = boulderString[9:]
+    print(boulderString)
+    boulderString = re.findall(r'(?<=\{)(.*?)(?=\})', boulderString)
+    
+    for s in boulderString:
+        s = s.split(',')
+        xPos = int(s[0])
+        yPos = int(s[1])
+        grid[xPos][yPos] = Boulder()
         print(s)
 
-
-    print(str(x) + ' ' + str(y) )
     print("heres the grid")
     print(grid)
 
