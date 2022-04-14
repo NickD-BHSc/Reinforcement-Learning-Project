@@ -1,46 +1,29 @@
 
 class State(object):
-
+    symbol = '_'
     def __init__(self, cost):
         self.actions = ["N", "S", "E", "W"]
         self.transitionCost = cost
     
-    
-
-
     #toString function
     def __str__(self):
-         return "State"
+         return self.symbol
     
     #another toString function (idk its some python stuff)
     def __repr__(self):
-        return "State"
+        return self.symbol
 
 
 class Terminal(State):
+    symbol = 'T'
 
     def __init__(self, cost):
         super().__init__(cost)
-        self.actions = ["EXIT"]    
-        
-    #toString function
-    def __str__(self):
-         return "Terminal"
-    
-    #another toString function (idk its some python stuff)
-    def __repr__(self):
-        return "Terminal"
+        self.actions = ["EXIT"] 
 
 
 class Boulder(State):
+    symbol = 'B'
     
     def __init__(self):
         self.actions = []    
-        
-    #toString function
-    def __str__(self):
-         return "Boulder"
-    
-    #another toString function (idk its some python stuff)
-    def __repr__(self):
-        return "Boulder"
