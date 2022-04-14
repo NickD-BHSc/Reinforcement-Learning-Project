@@ -4,8 +4,10 @@ from states import State, Boulder, Terminal
 
 class Grid():
 
-    def __init__(self, grid):
-        self.grid = grid    
+    def __init__(self, grid, width, height):
+        self.grid = grid
+        self.width = height
+        self.height = height     
         
     #toString function
     def __str__(self):
@@ -13,7 +15,7 @@ class Grid():
         for i in range(3):
             result += '['
             for j in range(4):
-                result += str(self.grid[j][i]) + ' '
+                result += str(self.grid[self.height-1 - j][self.width-1 - i]) + ' '
             result += ']\n'
 
         return result
@@ -77,7 +79,6 @@ def setupGrid():
 
     #Set up boulders
     boulderString = boulderString[9:]
-    print(boulderString)
     boulderString = re.findall(r'(?<=\{)(.*?)(?=\})', boulderString)
     
     for s in boulderString:
@@ -92,4 +93,5 @@ def setupGrid():
     #solve(problem)
 
     file.close()
-    return grid
+    
+    return Grid(grid, x, y)

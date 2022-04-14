@@ -4,7 +4,6 @@ from grid import Grid, setupGrid
 
 def main():
     grid = setupGrid()
-    grid = Grid(grid)
     
     print(grid)
 

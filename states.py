@@ -1,9 +1,16 @@
+import enum as Enum
 
 class State(object):
+
     symbol = '_'
     def __init__(self, cost):
-        self.actions = ["N", "S", "E", "W"]
+        self.actions = [Actions.N, Actions.S, Actions.E, Actions.W]
         self.transitionCost = cost
+
+        #value iteration
+        self.optimalValue = 0.0
+        self.vOptimalAction = '-1' #Havent found an optimal action at the beginning
+
     
     #toString function
     def __str__(self):
@@ -19,7 +26,7 @@ class Terminal(State):
 
     def __init__(self, cost):
         super().__init__(cost)
-        self.actions = ["EXIT"] 
+        self.actions = [Actions.EXIT] 
 
 
 class Boulder(State):
@@ -27,3 +34,11 @@ class Boulder(State):
     
     def __init__(self):
         self.actions = []    
+
+
+class Actions(Enum):
+    N = 0
+    S = 1
+    E = 2
+    W = 3
+    EXIT = 4
