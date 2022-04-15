@@ -18,7 +18,7 @@ def bellman(state, grid, x, y):
         for a in state.actions:
             value = 0
             if a == 'N': # probability, utility, 1-probability, utility
-                if y-1 >= 0:
+                if y-1 >= 0 and grid.grid[x][y-1].symbol == 'B':
                     value += correctDirProb * (state.cost + discount * grid.grid[x][y-1].utility )
                 if x-1 >= 0:
                     value += slipProb * (state.cost + discount * grid.grid[x-1][y].utility )
@@ -57,11 +57,10 @@ def bellman(state, grid, x, y):
 def main():
     grid = setupGrid()
     
-    k = 5 #grid.K
+    k = 2 #grid.K
     iteration = 0
 
     while iteration < k:
-        maxValue = 0
         for x in range(grid.width):
             for y in range(grid.height):
                 state = grid.grid[x][y]
@@ -69,7 +68,7 @@ def main():
                     state.utility = bellman(state, grid, x, y)
         iteration += 1
 
-    grid.printUtility();
+    grid.printUtility()
 
     #    optimal policy = max of all values?
     #return optimal policy for all states in grid world
