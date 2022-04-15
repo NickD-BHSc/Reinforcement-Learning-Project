@@ -297,6 +297,9 @@ def getMazeGrid():
           ['S',' ',' ',' ']]
   return Gridworld(grid)
 
+# def getInputGrid():
+
+
 
 
 def getUserAction(state, actionFunction):
@@ -408,7 +411,7 @@ def parseOptions():
                          dest='speed',default=1.0,
                          help='Speed of animation, S > 1.0 is faster, 0.0 < S < 1.0 is slower (default %default)')
     optParser.add_option('-m', '--manual',action='store_true',
-                         dest='manual',default=False,
+                         dest='manual',default=True,
                          help='Manually control agent')
     optParser.add_option('-v', '--valueSteps',action='store_true' ,default=False,
                          help='Display each step of value iteration')

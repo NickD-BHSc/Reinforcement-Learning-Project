@@ -54,7 +54,7 @@ class GraphicsGridworldDisplay:
 
 BACKGROUND_COLOR = formatColor(0,0,0)    
 EDGE_COLOR = formatColor(1,1,1)
-OBSTACLE_COLOR = formatColor(0.5,0.5,0.5)
+OBSTACLE_COLOR = formatColor(1,0.5,1)
 TEXT_COLOR = formatColor(1,1,1)
 MUTED_TEXT_COLOR = formatColor(0.7,0.7,0.7)
 LOCATION_COLOR = formatColor(0,0,1)

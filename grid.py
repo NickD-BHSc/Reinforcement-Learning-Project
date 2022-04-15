@@ -1,6 +1,6 @@
 import sys
 import re
-from states import State, Boulder, Terminal
+from states import State, Boulder, Terminal, Robot
 
 class Grid():
 
@@ -22,6 +22,11 @@ class Grid():
     def __repr__(self):
         return "Grid"
 
+def checkTerminals(agentPosition, terminalPositions):
+    for tPosition in terminalPositions:
+        if agentPosition[0] == tPosition[0] and agentPosition[1] == tPosition[1]:
+            return True
+    return False
 
 
 #sets up the grid from a file
@@ -48,7 +53,7 @@ def setupGrid():
     line = file.readline() # Boulder=?
     boulderString = line
     line = file.readline() # RobotStartState=?
-    robotStartString = line[1]
+    robotStartString = line
     line = file.readline().split('=') # K=?
     K = int(line[1])
     line = file.readline().split('=') # Episodes=?
@@ -67,14 +72,21 @@ def setupGrid():
     #Set up terminals
     terminalString = terminalString[10:]
     terminalString = re.findall(r'(?<=\{)(.*?)(?=\})', terminalString)
+
+    terminalPos = []
     
     for s in terminalString:
         s = s.split(',')
+        coords = []
         xPos = int(s[0])
         yPos = int(s[1])
+        coords.append(xPos)
+        coords.append(yPos)
         cost = int(s[2])
         grid[xPos][yPos] = Terminal(cost)
+        terminalPos.append(coords)
 
+    print(f"tP: {terminalPos}")
     #Set up boulders
     boulderString = boulderString[9:]
     print(boulderString)
@@ -86,10 +98,36 @@ def setupGrid():
         yPos = int(s[1])
         grid[xPos][yPos] = Boulder()
 
+    robotStartString = robotStartString[16:]
+    robotStartString = re.findall(r'(?<=\{)(.*?)(?=\})', robotStartString)
+    
+    agentPos = []
+    for s in robotStartString:
+        s = s.split(',')
+        xPos = int(s[0])
+        agentPos.append(xPos)
+        yPos = int(s[1])
+        agentPos.append(yPos)
+        grid[xPos][yPos] = Robot()
+        # print(f"x:{xPos},y:{yPos}")
+
     #Terminal = Terminal(line[1])
 
+    while not checkTerminals(agentPos, terminalPos):
+        agentPos[0] = 3
+        agentPos[1] = 1
+        print(f"cek")
+
+    print(f"robot: {agentPos[1]}")
     #finished parsing, try to solve
     #solve(problem)
+
+    # while agentPos != 
+
+
+    print(f"tc: {transitionCost}")
+    
+    # while 
 
     file.close()
     return grid

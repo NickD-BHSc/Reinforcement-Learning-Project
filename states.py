@@ -26,4 +26,10 @@ class Boulder(State):
     symbol = 'B'
     
     def __init__(self):
+        self.actions = []
+
+class Robot(State):
+    symbol = 'R'
+    
+    def __init__(self):
         self.actions = []    
