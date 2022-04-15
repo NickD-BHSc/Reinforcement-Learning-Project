@@ -4,18 +4,39 @@ from states import State, Boulder, Terminal
 
 class Grid():
 
-    def __init__(self, grid, width, height):
+    def __init__(self, grid, width, height, K, discount, noise):
         self.grid = grid
-        self.width = height
+        self.width = width
         self.height = height     
+        self.K = K
+        self.noise = noise
+        self.discount = discount
+
         
+    def checkTerminals(self, agentPosition):
+        if self.grid[agentPosition[0]][agentPosition[1]].symbol is 'T':
+            return True
+        return False
+    
+    def getGrid(self):
+        return self.grid
+
+    def printUtility(self):
+        result = ''
+        for i in range(self.height):
+            result += '['
+            for j in range(self.width):
+                result += str(round(self.grid[j][self.height-1 - i].utility, 2)) + ', '
+            result += ']\n'
+        print(result)
+
     #toString function
     def __str__(self):
         result = ''
-        for i in range(3):
+        for i in range(self.height):
             result += '['
-            for j in range(4):
-                result += str(self.grid[self.height-1 - j][self.width-1 - i]) + ' '
+            for j in range(self.width):
+                result += str(self.grid[j][self.height-1 - i]) + ' '
             result += ']\n'
 
         return result
@@ -64,11 +85,16 @@ def setupGrid():
     line = file.readline().split('=') # transitionCost=?
     transitionCost = float(line[1])
 
-    grid = [ [State(transitionCost)]*y for i in range(x)]  ## create a grid of size x y filled with empty States
+    grid = [ [0]*y for i in range(x)]  ## create a grid of size x y filled with empty States
+
+    for i in range(x):
+        for j in range(y):
+            grid[i][j] = State(transitionCost)
 
     #Set up terminals
     terminalString = terminalString[10:]
     terminalString = re.findall(r'(?<=\{)(.*?)(?=\})', terminalString)
+
     
     for s in terminalString:
         s = s.split(',')
@@ -94,4 +120,4 @@ def setupGrid():
 
     file.close()
     
-    return Grid(grid, x, y)
+    return Grid(grid, x, y, K, discount, noise)

@@ -1,11 +1,14 @@
 import enum as Enum
+from re import X
 
 class State(object):
 
     symbol = '_'
     def __init__(self, cost):
-        self.actions = [Actions.N, Actions.S, Actions.E, Actions.W]
-        self.transitionCost = cost
+        self.actions = ['N', 'S', 'E', 'W']
+        self.cost = cost
+
+        self.utility = 0
 
         #value iteration
         self.optimalValue = 0.0
@@ -26,19 +29,14 @@ class Terminal(State):
 
     def __init__(self, cost):
         super().__init__(cost)
-        self.actions = [Actions.EXIT] 
+        self.actions = ['EXIT'] 
+
 
 
 class Boulder(State):
     symbol = 'B'
     
     def __init__(self):
+        super().__init__(0)
         self.actions = []    
 
-
-class Actions(Enum):
-    N = 0
-    S = 1
-    E = 2
-    W = 3
-    EXIT = 4
