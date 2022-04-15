@@ -12,38 +12,39 @@ def bellman(state, grid, x, y):
     else:
         correctDirProb = 1 - grid.noise
         slipProb = grid.noise /2
+        discount = grid.discount
 
         bestAction = 'N' #
         for a in state.actions:
             value = 0
             if a == 'N': # probability, utility, 1-probability, utility
                 if y-1 >= 0:
-                    value += correctDirProb * grid.grid[x][y-1].utility
+                    value += correctDirProb * (state.cost + discount * grid.grid[x][y-1].utility )
                 if x-1 >= 0:
-                    value += slipProb * grid.grid[x-1][y].utility
+                    value += slipProb * (state.cost + discount * grid.grid[x-1][y].utility )
                 if x+1 < grid.width:
-                    value += slipProb * grid.grid[x+1][y].utility # + DISCOUNTED UTILITY OF S'v
+                    value += slipProb * (state.cost + discount * grid.grid[x+1][y].utility ) # + DISCOUNTED UTILITY OF S'v
             if a == 'S':
                 if y+1 < grid.height:
-                    value += correctDirProb* grid.grid[x][y+1].utility
+                    value += correctDirProb* (state.cost + discount * grid.grid[x][y+1].utility )
                 if x-1 >= 0:
-                    value += slipProb * grid.grid[x-1][y].utility 
+                    value += slipProb * (state.cost + discount * grid.grid[x-1][y].utility )
                 if x+1 < grid.width:
-                    value += slipProb * grid.grid[x+1][y].utility # + DISCOUNTED UTILITY OF S'v
+                    value += slipProb * (state.cost + discount * grid.grid[x+1][y].utility )# + DISCOUNTED UTILITY OF S'v
             if a == 'E':
                 if x+1 < grid.width:
-                    value += correctDirProb * grid.grid[x+1][y].utility 
+                    value += correctDirProb * (state.cost + discount * grid.grid[x+1][y].utility )
                 if y+1 < grid.height:
-                    value += slipProb * grid.grid[x][y+1].utility 
+                    value += slipProb * (state.cost + discount * grid.grid[x][y+1].utility )
                 if y-1 >= 0:
-                    value += slipProb * grid.grid[x][y-1].utility # + DISCOUNTED UTILITY OF S'v
+                    value += slipProb * (state.cost + discount *  grid.grid[x][y-1].utility )# + DISCOUNTED UTILITY OF S'v
             if a == 'W':
                 if x-1 >= 0:
-                    value += correctDirProb * grid.grid[x-1][y].utility 
+                    value += correctDirProb * (state.cost + discount * grid.grid[x-1][y].utility) 
                 if y+1 < grid.height:
-                    value += slipProb * grid.grid[x][y+1].utility 
+                    value += slipProb * (state.cost + discount *  grid.grid[x][y+1].utility )
                 if y-1 >=0:
-                    value += slipProb * grid.grid[x][y-1].utility # + DISCOUNTED UTILITY OF S'v
+                    value += slipProb * (state.cost + discount * grid.grid[x][y-1].utility )# + DISCOUNTED UTILITY OF S'v
             
             if value > maxValue:
                 maxValue = value
