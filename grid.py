@@ -113,10 +113,16 @@ def setupGrid():
 
     #Terminal = Terminal(line[1])
 
+    # this check works
     while not checkTerminals(agentPos, terminalPos):
-        agentPos[0] = 3
-        agentPos[1] = 1
-        print(f"cek")
+        # make a random choice of which direction to go
+        # ex go north
+        # compute the value:
+        # v(k+1) = (probability1 * transition * (reward + discount*prevState)) + (probability2 * transition * (reward + discount*prevState))
+        nextStep = probability * currValue * (reward + discount * prevState) + 1-probability * 
+        # agentPos[0] = 3
+        # agentPos[1] = 1
+        # print(f"cek")
 
     print(f"robot: {agentPos[1]}")
     #finished parsing, try to solve
