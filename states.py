@@ -12,7 +12,7 @@ class State(object):
 
         #value iteration
         self.optimalValue = 0.0
-        self.vOptimalAction = '-1' #Havent found an optimal action at the beginning
+        self.policy = 'N'
 
     
     #toString function

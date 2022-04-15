@@ -26,7 +26,8 @@ class Grid():
         for i in range(self.height):
             result += '['
             for j in range(self.width):
-                result += str(round(self.grid[j][self.height-1 - i].utility, 2)) + ', '
+                state = self.grid[j][self.height-1 - i]
+                result += str(round(state.utility, 2)) + ':'+ state.policy + ', '
             result += ']\n'
         print(result)
 

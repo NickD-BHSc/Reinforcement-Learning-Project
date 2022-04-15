@@ -7,24 +7,25 @@ from grid import Grid, setupGrid
 def bellman(state, grid, x, y):
     
     maxValue = 0
+    bestAction = 'N' #default to N
     if state.symbol == 'T':
         maxValue = state.cost
+        bestAction = '' #default to N
     else:
         correctDirProb = 1 - grid.noise
         slipProb = grid.noise /2
         discount = grid.discount
 
-        bestAction = 'N' #
         for a in state.actions:
             value = 0
-            if a == 'N': # probability, utility, 1-probability, utility
+            if a == 'S': # probability, utility, 1-probability, utility
                 if y-1 >= 0:
                     value += correctDirProb * (state.cost + discount * grid.grid[x][y-1].utility )
                 if x-1 >= 0:
                     value += slipProb * (state.cost + discount * grid.grid[x-1][y].utility )
                 if x+1 < grid.width:
                     value += slipProb * (state.cost + discount * grid.grid[x+1][y].utility ) # + DISCOUNTED UTILITY OF S'v
-            if a == 'S':
+            if a == 'N':
                 if y+1 < grid.height:
                     value += correctDirProb* (state.cost + discount * grid.grid[x][y+1].utility )
                 if x-1 >= 0:
@@ -51,7 +52,7 @@ def bellman(state, grid, x, y):
                 bestAction = a
     
 
-    return maxValue
+    return [maxValue, bestAction]
 
 
 def main():
@@ -66,7 +67,7 @@ def main():
             for y in range(grid.height):
                 state = grid.grid[x][y]
                 for a in state.actions:
-                    state.utility = bellman(state, grid, x, y)
+                    [state.utility, state.policy] = bellman(state, grid, x, y)
         iteration += 1
 
     grid.printUtility();
