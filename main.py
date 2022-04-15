@@ -10,7 +10,7 @@ def bellman(state, grid, x, y):
     bestAction = 'N' #default to N
     if state.symbol == 'T':
         maxValue = state.cost
-        bestAction = '' #default to N
+        bestAction = ' ' #default to N
     else:
         correctDirProb = 1 - grid.noise
         slipProb = grid.noise /2

@@ -14,7 +14,7 @@ class Grid():
 
         
     def checkTerminals(self, agentPosition):
-        if self.grid[agentPosition[0]][agentPosition[1]].symbol is 'T':
+        if self.grid[agentPosition[0]][agentPosition[1]].symbol == 'T':
             return True
         return False
     
@@ -27,7 +27,10 @@ class Grid():
             result += '['
             for j in range(self.width):
                 state = self.grid[j][self.height-1 - i]
-                result += str(round(state.utility, 2)) + ':'+ state.policy + ', '
+                if state.symbol == 'B':
+                    result += 'B: , '
+                else:
+                    result += str(round(state.utility, 2)) + ':'+ state.policy + ', '
             result += ']\n'
         print(result)
 
