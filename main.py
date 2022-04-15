@@ -26,7 +26,7 @@ def bellman(state, grid, x, y):
                 if x-1 >= 0 and grid.grid[x-1][y].symbol != 'B':
                     value += slipProb * (state.cost + discount * grid.grid[x-1][y].utility )
                 else:
-                    value += correctDirProb * (state.cost + discount * grid.grid[x][y].utility) 
+                    value += slipProb * (state.cost + discount * grid.grid[x][y].utility) 
                 if x+1 < grid.width and grid.grid[x+1][y].symbol != 'B':
                     value += slipProb * (state.cost + discount * grid.grid[x+1][y].utility ) # + DISCOUNTED UTILITY OF S'v
                 else:
@@ -52,7 +52,7 @@ def bellman(state, grid, x, y):
                 if y+1 < grid.height and grid.grid[x][y+1].symbol != 'B':
                     value += slipProb * (state.cost + discount * grid.grid[x][y+1].utility )
                 else:
-                    value += correctDirProb * (state.cost + discount * grid.grid[x][y].utility) 
+                    value += slipProb * (state.cost + discount * grid.grid[x][y].utility) 
                 if y-1 >= 0 and grid.grid[x][y-1].symbol != 'B':
                     value += slipProb * (state.cost + discount *  grid.grid[x][y-1].utility )# + DISCOUNTED UTILITY OF S'v
                 else:
@@ -65,12 +65,12 @@ def bellman(state, grid, x, y):
                 if y+1 < grid.height and grid.grid[x][y+1].symbol != 'B':
                     value += slipProb * (state.cost + discount *  grid.grid[x][y+1].utility )
                 else:
-                    value += correctDirProb * (state.cost + discount * grid.grid[x][y].utility) 
+                    value += slipProb * (state.cost + discount * grid.grid[x][y].utility) 
                 if y-1 >=0 and grid.grid[x][y-1].symbol != 'B':
                     value += slipProb * (state.cost + discount * grid.grid[x][y-1].utility )# + DISCOUNTED UTILITY OF S'v
                 else:
                     value += slipProb * (state.cost + discount * grid.grid[x][y].utility) 
-            
+                    
             if value > maxValue:
                 maxValue = value
                 bestAction = a
