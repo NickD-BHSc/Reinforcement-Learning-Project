@@ -2,6 +2,7 @@ import sys
 from states import State, Boulder, Terminal
 from grid import Grid, setupGrid
 from ValueIteration import bellman
+import random
 
 def updateResults(k):
     pass
@@ -25,8 +26,10 @@ def main():
         grid.printUtility()
     
     
-
+directions = [[0,-1],[0,1],[1,0],[-1,0]]
 
 
 if __name__ == "__main__":
     main()
+    x = random.choice(directions)
+    print(f"state: {x}, x:{x[0]}, y:{x[1]}")
