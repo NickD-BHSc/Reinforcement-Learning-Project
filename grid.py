@@ -4,10 +4,11 @@ from states import State, Boulder, Terminal
 
 class Grid():
 
-    def __init__(self, grid, width, height, K, discount, noise):
+    def __init__(self, grid, width, height, startState, K, discount, noise):
         self.grid = grid
         self.width = width
         self.height = height     
+        self.startState = startState
         self.K = K
         self.noise = noise
         self.discount = discount
@@ -75,7 +76,7 @@ def setupGrid():
     line = file.readline() # Boulder=?
     boulderString = line
     line = file.readline() # RobotStartState=?
-    robotStartString = line[1]
+    robotStartString = line
     line = file.readline().split('=') # K=?
     K = int(line[1])
     line = file.readline().split('=') # Episodes=?
@@ -117,11 +118,11 @@ def setupGrid():
         yPos = int(s[1])
         grid[xPos][yPos] = Boulder()
 
-    #Terminal = Terminal(line[1])
+    #get the startState
+    robotStartString = re.findall(r'(?<=\{)(.*?)(?=\})', robotStartString)
+    startState = robotStartString[0].split(',')
 
-    #finished parsing, try to solve
-    #solve(problem)
 
     file.close()
     
-    return Grid(grid, x, y, K, discount, noise)
+    return Grid(grid, x, y, K, startState, discount, noise)

@@ -26,9 +26,6 @@ def main():
     
     
 
-    #    optimal policy = max of all values?
-    #return optimal policy for all states in grid world
-
 
 
 if __name__ == "__main__":
