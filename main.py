@@ -1,5 +1,4 @@
 import sys
-from turtle import right
 from states import State, Boulder, Terminal
 from grid import Grid, setupGrid
 
@@ -10,7 +9,7 @@ def bellman(state, grid, x, y):
     bestAction = 'N' #default to N
     if state.symbol == 'T':
         maxValue = state.cost
-        bestAction = ' ' #default to N
+        bestAction = ' '
     else:
         correctDirProb = 1 - grid.noise
         slipProb = grid.noise /2
@@ -70,7 +69,7 @@ def bellman(state, grid, x, y):
                     value += slipProb * (state.cost + discount * grid.grid[x][y-1].utility )# + DISCOUNTED UTILITY OF S'v
                 else:
                     value += slipProb * (state.cost + discount * grid.grid[x][y].utility) 
-                    
+
             if value > maxValue:
                 maxValue = value
                 bestAction = a
@@ -82,7 +81,7 @@ def bellman(state, grid, x, y):
 def main():
     grid = setupGrid()
     
-    k = 5 #grid.K
+    k = 2 #grid.K
     iteration = 0
 
     while iteration < k:
@@ -94,7 +93,7 @@ def main():
                     [state.utility, state.policy] = bellman(state, grid, x, y)
         iteration += 1
 
-    grid.printUtility();
+    grid.printUtility()
 
     #    optimal policy = max of all values?
     #return optimal policy for all states in grid world
