@@ -61,7 +61,7 @@ def setupGrid():
     try:
         file = open(fileName)
     except FileNotFoundError:
-        print("Couldn't find file {filename}.... Please try again.")
+        print(f"Couldn't find file {fileName}.... Please try again.")
         exit()
 
 
