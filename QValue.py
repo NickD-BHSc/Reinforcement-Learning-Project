@@ -18,7 +18,7 @@ def qValueCalculation(state, grid, x, y):
             # South
             if y == 1: # probability, utility, 1-probability, utility
                 if y-1 >= 0 and grid.grid[x][y-1].symbol != 'B':
-                    value += correctDirProb * (state.cost + discount * grid.grid[x][y-1].utility )
+                    value += correctDirProb * (state.cost + discount * max(state.qvalues.values()) )
                 else:
                     value += correctDirProb * (state.cost + discount * grid.grid[x][y].utility) 
                 if x-1 >= 0 and grid.grid[x-1][y].symbol != 'B':
@@ -30,20 +30,6 @@ def qValueCalculation(state, grid, x, y):
                 else:
                     value += slipProb * (state.cost + discount * grid.grid[x][y].utility)
 
-    max of Q over all actions available:
-    allQValues = []
-    if y+1 < grid.height:
-        southValue = grid.grid[x][y+1].utility
-        allQValues.append(southValue)
-    if y-1 >= 0:
-        northValue = grid.grid[x][y-1].utility
-        allQValues.append(northValue)
-    if x-1 >= 0:
-        westValue = grid.grid[x-1][y].utility
-        allQValues.append(westValue)
-    if x+1 < grid.width:
-        eastValue = grid.grid[x+1][y].utility
-        allQValues.append(eastValue)
 
     maxQValue = max(allQValues)
     [grid.grid[x][y-1].utility, grid.grid[x][y-1].utility, grid.grid[x][y-1].utility, grid.grid[x][y-1].utility]
@@ -55,11 +41,26 @@ def episode(grid):
     state = grid.startState
     done = False
     while not done:
-        nextState = random.choice(directions)
-        qValueNext = qValueCalculation(state, grid, nextState[0], nextState[1])
+        direction = random.choice(directions)
+        direction = directions.index(nextState)
+        qValueCurr = qValueCalculation(state, grid, nextState[0], nextState[1])
+        
+        if direction == 0:
+            state.qvalues['N'] = qValueCurr
+        if direction == 1:
+            direction = 'S'
+        if direction == 2:
+            direction = 'E'
+        if direction == 3:
+            direction = 'W'
+
+        
+        
         check if we're done
 
 
+
+"""
     if state.symbol == 'T':
         maxValue = state.cost
         bestAction = ' '
@@ -73,4 +74,4 @@ def episode(grid):
             if a == 'S': # probability, utility, 1-probability, utility
                 if y-1 >= 0 and grid.grid[x][y-1].symbol != 'B':
                     value += correctDirProb * (state.cost + discount * grid.grid[x][y-1].utility )
-                else:
+                else:"""

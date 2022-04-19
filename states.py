@@ -14,6 +14,14 @@ class State(object):
         self.optimalValue = 0.0
         self.policy = 'N'
 
+        #qvalue learning
+        self.qvalues = {
+            "N":0.0,
+            "E":0.0,
+            "S":0.0,
+            "W":0.0
+        }
+
     
     #toString function
     def __str__(self):
