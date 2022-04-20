@@ -1,6 +1,18 @@
 
 from sre_parse import State
 import random
+
+
+# sooo, random for first few episodes. then getpolicy based on MAX qvalue. 
+# then if theres negative values, it's worthwhile for agent to 'explore places it hasn't yet' 
+# i.e. 0 value qvalue. so pick based on q values, then based on random if there are 0.0 ties
+
+
+
+
+
+
+
 class QLearningAgent(ReinforcementAgent):
   """
     Q-Learning Agent
