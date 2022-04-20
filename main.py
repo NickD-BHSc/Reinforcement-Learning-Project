@@ -25,7 +25,7 @@ def main():
 
         grid.printUtility()
     
-    
+    grid.printQvalue()
 directions = [[0,-1],[0,1],[1,0],[-1,0]]
 
 

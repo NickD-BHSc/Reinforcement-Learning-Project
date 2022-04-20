@@ -35,6 +35,67 @@ class Grid():
             result += ']\n'
         print(result)
 
+    def printQvalue(self):
+        RED='\033[0;31m'
+        GREEN='\033[0;32m'
+        BLACK='\033[0;30m'
+        WHITE='\033[0;37m'
+        BLUE='\033[0;34m'
+        for y in range(self.height):
+            flippedY = self.height-1 -y
+            for i in range(4):
+                for x in range(self.width):
+                    isTerminal = self.grid[x][flippedY].symbol == 'T'
+                    if self.grid[x][flippedY].symbol == 'B' or i%4 == 0:
+                        print(f"{BLUE}################", end='')
+                    elif isTerminal:
+                        if i%4 == 2:
+                            value = self.grid[x][flippedY].qvalues["EXIT"]
+                            color = WHITE
+                            if(value < 0):
+                                color = RED
+                            elif(value > 0):
+                                color = GREEN
+                            print(f"{BLUE}#{BLACK}_____{color}{value:.2f}{BLACK}_____ ", end='')
+                        else:
+                            print(f"{BLUE}#{BLACK}______________ ", end='')
+                            
+                    elif i%4 == 1:
+                        value = self.grid[x][flippedY].qvalues["N"]
+                        color = WHITE
+                        if(value < 0):
+                            color = RED
+                        elif(value > 0):
+                            color = GREEN
+                        print(f"{BLUE}#{BLACK}_____{color}{value:.2f}{BLACK}_____ ", end='')
+                    elif i%4 == 2:
+                        value1 = self.grid[x][flippedY].qvalues["W"]
+                        value2 = self.grid[x][flippedY].qvalues["E"]
+                        color1 = WHITE
+                        if(value1 < 0):
+                            color1 = RED
+                        elif(value1 > 0):
+                            color1 = GREEN
+                        color2 = WHITE
+                        if(value1 < 0):
+                            color2 = RED
+                        elif(value1 > 0):
+                            color2 = GREEN
+                        print(f"{BLUE}# {color1}{value1:.2f}{BLACK}_____{color2}{value2:.2f}{BLACK} ", end='')
+                    elif i%4 == 3:
+                        value = self.grid[x][flippedY].qvalues["S"]
+                        color = WHITE
+                        if(value < 0):
+                            color = RED
+                        elif(value > 0):
+                            color = GREEN
+                        print(f"{BLUE}#{BLACK}_____{color}{value:.2f}{BLACK}_____ ", end='')
+                print(f"{BLUE}#")
+    
+        for x in range(self.width):
+            print(f"{BLUE}################{WHITE}", end='')
+        print('') #newline
+
     #toString function
     def __str__(self):
         result = ''
