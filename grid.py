@@ -10,6 +10,7 @@ class Grid():
         self.height = height     
         self.startState = startState
         self.K = K
+
         self.noise = noise
         self.discount = discount
 
@@ -186,4 +187,4 @@ def setupGrid():
 
     file.close()
     
-    return Grid(grid, x, y, K, startState, discount, noise)
+    return Grid(grid, x, y, startState, K, discount, noise)
