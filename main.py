@@ -14,15 +14,21 @@ def main():
     grid = setupGrid()
     
     
-    k = 1 #grid.K
-    iteration = 0
-    print(f"grid start: {grid.startState}")
+    print(f"Robot starting at: {grid.startState}")
+
+    maxEpisodes = grid.Episodes
     episodes = 0
-    while episodes < 500:
+    print("Running QValue Learning...")
+    while episodes < maxEpisodes:
         episode(grid)
-        print(f"Episode: {episodes} Done")
         episodes += 1
+
+    grid.printQvalue()
     
+
+    k = grid.K
+    iteration = 0
+    print("Running Value Iteration...")
     #VALUE ITERATION
     while iteration < k:
         for x in range(grid.width):
@@ -35,7 +41,6 @@ def main():
 
     grid.printUtility()
     
-    grid.printQvalue()
 directions = [[0,-1],[0,1],[1,0],[-1,0]]
 
 

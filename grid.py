@@ -4,12 +4,13 @@ from states import State, Boulder, Terminal
 
 class Grid():
 
-    def __init__(self, grid, width, height, startState, K, discount, noise):
+    def __init__(self, grid, width, height, startState, K, Episodes, discount, noise):
         self.grid = grid
         self.width = width
         self.height = height     
         self.startState = startState
         self.K = K
+        self.Episodes = Episodes
 
         self.noise = noise
         self.discount = discount
@@ -30,9 +31,10 @@ class Grid():
             for j in range(self.width):
                 state = self.grid[j][self.height-1 - i]
                 if state.symbol == 'B':
-                    result += 'B: , '
+                    result += 'B  : , '
                 else:
-                    result += str(round(state.utility, 2)) + ':'+ state.policy + ', '
+                    value = state.utility
+                    result += f'{value:.2f}:'+ state.policy + ', '
             result += ']\n'
         print(result)
 
@@ -69,8 +71,9 @@ class Grid():
                         if(round(value, 2) < 0):
                             color = RED
                             print(f"{BLUE}#{BLACK}____{color}{value:.2f}{BLACK}_____ ", end='')
-                        elif(round(value, 2) > 0):
-                            color = GREEN
+                        else:
+                            if(round(value, 2) > 0):
+                                color = GREEN
                             print(f"{BLUE}#{BLACK}_____{color}{value:.2f}{BLACK}_____ ", end='')
                     elif i%4 == 2:
                         value1 = self.grid[x][flippedY].qvalues["W"]
@@ -125,15 +128,16 @@ class Grid():
 
 #sets up the grid from a file
 def setupGrid():
-    fileName = "gridFiles/gridConf.txt"
+    fileName = "gridConf"
     if len(sys.argv) > 1:
         fileName = sys.argv[1]
 
-    print(f"Solving puzzles in file: {fileName}")
+    print(f"Solving puzzles in file: gridFiles/{fileName}.txt")
     try:
-        file = open(fileName)
+        filePath = "gridFiles/" + fileName + ".txt"
+        file = open(filePath)
     except FileNotFoundError:
-        print(f"Couldn't find file {fileName}.... Please try again.")
+        print(f"Couldn't find file gridFiles/{fileName}.txt.... Please try again.")
         exit()
 
 
@@ -196,4 +200,4 @@ def setupGrid():
 
     file.close()
     
-    return Grid(grid, x, y, startState, K, discount, noise)
+    return Grid(grid, x, y, startState, K, Episodes, discount, noise)
