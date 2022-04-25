@@ -1,3 +1,8 @@
+# COMP 4190: A3 - Reinforcement Learning
+# Instructor: Dr. Cuneyt G Akcora
+# Student Names and Numbers:
+# Aaron Salo - 7805174
+# Nicholas Duan - 7742401
 
 from sre_parse import State
 import random
