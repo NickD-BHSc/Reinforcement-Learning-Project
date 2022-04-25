@@ -2,8 +2,7 @@ import sys
 from states import State, Boulder, Terminal
 from grid import Grid, setupGrid
 from ValueIteration import bellman
-from QValue import qValueCalculation, episode
-import random
+from QValue import episode
 
 def updateResults(k):
     pass
@@ -16,9 +15,10 @@ def main():
     
     k = 1 #grid.K
     iteration = 0
-    print(f"gird start: {grid.startState}")
+    print(f"grid start: {grid.startState}")
     episodes = 0
     while episodes < 10:
+        print(f"Episode: {episodes}")
         episode(grid)
         episodes += 1
     

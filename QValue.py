@@ -2,188 +2,138 @@
 from sre_parse import State
 import random
 
+def getQValue(state, action):
+    pass
+
+
+def getValue( state):
+    pass
+
+#return max of all Qvalues
+def getPolicy(state):
+    maximum = 'N'
+    for i in state.qvalues:
+        i
+    return max(state.qvalues.values() )
+
+def update(state, action, nextState, reward):
+    pass
 
 # sooo, random for first few episodes. then getpolicy based on MAX qvalue. 
 # then if theres negative values, it's worthwhile for agent to 'explore places it hasn't yet' 
 # i.e. 0 value qvalue. so pick based on q values, then based on random if there are 0.0 ties
-
-
-
-
-
-
-
-class QLearningAgent(ReinforcementAgent):
-  """
-    Q-Learning Agent
-
-    Functions you should fill in:
-      - getQValue
-      - getAction
-      - getValue
-      - getPolicy
-      - update
-
-    Instance variables you have access to
-      - self.epsilon (exploration prob)
-      - self.alpha (learning rate)
-      - self.discount (discount rate)
-
-    Functions you should use
-      - self.getLegalActions(state)
-        which returns legal actions
-        for a state
-  """
-  def __init__(self, **args):
-    "You can initialize Q-values here..."
-    ReinforcementAgent.__init__(self, **args)
-
-    "*** YOUR CODE HERE ***"
-
-  def getQValue(self, state, action):
-    """
-      Returns Q(state,action)
-      Should return 0.0 if we never seen
-      a state or (state,action) tuple
-    """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
-
-
-  def getValue(self, state):
-    """
-      Returns max_action Q(state,action)
-      where the max is over legal actions.  Note that if
-      there are no legal actions, which is the case at the
-      terminal state, you should return a value of 0.0.
-    """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
-
-  def getPolicy(self, state):
-    """
-      Compute the best action to take in a state.  Note that if there
-      are no legal actions, which is the case at the terminal state,
-      you should return None.
-    """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
-
-  def update(self, state, action, nextState, reward):
-    """
-      The parent class calls this to observe a
-      state = action => nextState and reward transition.
-      You should do your Q-Value update here
-
-      NOTE: You should never call this function,
-      it will be called on your behalf
-    """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
-
 def qValueCalculation(currState, grid, direction):
     x = int(currState[0])
     y = int(currState[1])
     state = grid.grid[x][y]
-    if state.symbol == 'T':
-        value = state.cost
-        return [value, 'T']
-    else:
-        correctDirProb = 1 - grid.noise
-        slipProb = grid.noise /2
-        discount = grid.discount
-        value = 0
+    nextDir = None
+    correctDirProb = 1 - grid.noise
+    slipProb = grid.noise /2
+    discount = grid.discount
+    value = 0
+    
 
-        # South
-        if direction == 'S': # probability, utility, 1-probability, utility
-            if y-1 >= 0 and grid.grid[x][y-1].symbol != 'B':
-                value += correctDirProb * (state.cost + discount * max(grid.grid[x][y-1].qvalues.values()) )
-            else:
-                value += correctDirProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
-            if x-1 >= 0 and grid.grid[x-1][y].symbol != 'B':
-                value += slipProb * (state.cost + discount * max(grid.grid[x-1][y].qvalues.values()) )
-            else:
-                value += slipProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) ) 
-            if x+1 < grid.width and grid.grid[x+1][y].symbol != 'B':
-                value += slipProb * (state.cost + discount * max(grid.grid[x+1][y].qvalues.values()) )
-            else:
-                value += slipProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
-        if direction == 'N': # probability, utility, 1-probability, utility
-            if y-1 >= 0 and grid.grid[x][y-1].symbol != 'B':
-                value += correctDirProb * (state.cost + discount * max(grid.grid[x][y-1].qvalues.values()) )
-            else:
-                value += correctDirProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
-            if x-1 >= 0 and grid.grid[x-1][y].symbol != 'B':
-                value += slipProb * (state.cost + discount * max(grid.grid[x-1][y].qvalues.values()) )
-            else:
-                value += slipProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) ) 
-            if x+1 < grid.width and grid.grid[x+1][y].symbol != 'B':
-                value += slipProb * (state.cost + discount * max(grid.grid[x+1][y].qvalues.values()) )
-            else:
-                value += slipProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
-        if direction == 'E': # probability, utility, 1-probability, utility
-            if x+1 < grid.width and grid.grid[x+1][y].symbol != 'B':
-                value += correctDirProb * (state.cost + discount * max(grid.grid[x+1][y].qvalues.values()) )
-            else:
-                value += correctDirProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
-            if y+1 >= 0 and grid.grid[x][y+1].symbol != 'B':
-                value += slipProb * (state.cost + discount * max(grid.grid[x][y+1].qvalues.values()) )
-            else:
-                value += slipProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) ) 
-            if y-1 >= 0 and grid.grid[x][y-1].symbol != 'B':
-                value += correctDirProb * (state.cost + discount * max(grid.grid[x][y-1].qvalues.values()) )
-            else:
-                value += correctDirProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
-        if direction == 'W': # probability, utility, 1-probability, utility
-            if x-1 >= 0 and grid.grid[x-1][y].symbol != 'B':
-                value += correctDirProb * (state.cost + discount * max(grid.grid[x-1][y].qvalues.values()) )
-            else:
-                value += correctDirProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
-            if y-1 >= 0 and grid.grid[x][y-1].symbol != 'B':
-                value += slipProb * (state.cost + discount * max(grid.grid[x][y-1].qvalues.values()) )
-            else:
-                value += slipProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) ) 
-            if y+1 < grid.width and grid.grid[x][y+1].symbol != 'B':
-                value += slipProb * (state.cost + discount * max(grid.grid[x][y+1].qvalues.values()) )
-            else:
-                value += slipProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
+    # South
+    if direction == 'S': # probability, utility, 1-probability, utility
+        nextDir = random.choices(['S', 'E', 'W'], weights=(correctDirProb, slipProb, slipProb) ) ## get next state
+        if y-1 >= 0 and grid.grid[x][y-1].symbol != 'B':
+            value += correctDirProb * (state.cost + discount * max(grid.grid[x][y-1].qvalues.values()) )
+        else:
+            value += correctDirProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
+        if x-1 >= 0 and grid.grid[x-1][y].symbol != 'B':
+            value += slipProb * (state.cost + discount * max(grid.grid[x-1][y].qvalues.values()) )
+        else:
+            value += slipProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) ) 
+        if x+1 < grid.width and grid.grid[x+1][y].symbol != 'B':
+            value += slipProb * (state.cost + discount * max(grid.grid[x+1][y].qvalues.values()) )
+        else:
+            value += slipProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
+    elif direction == 'N': # probability, utility, 1-probability, utility
+        nextDir = random.choices(['N', 'E', 'W'], weights=(correctDirProb, slipProb, slipProb) ) ## get next state
+        if y-1 >= 0 and grid.grid[x][y-1].symbol != 'B':
+            value += correctDirProb * (state.cost + discount * max(grid.grid[x][y-1].qvalues.values()) )
+        else:
+            value += correctDirProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
+        if x-1 >= 0 and grid.grid[x-1][y].symbol != 'B':
+            value += slipProb * (state.cost + discount * max(grid.grid[x-1][y].qvalues.values()) )
+        else:
+            value += slipProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) ) 
+        if x+1 < grid.width and grid.grid[x+1][y].symbol != 'B':
+            value += slipProb * (state.cost + discount * max(grid.grid[x+1][y].qvalues.values()) )
+        else:
+            value += slipProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
+    elif direction == 'E': # probability, utility, 1-probability, utility
+        nextDir = random.choices(['E', 'S', 'N'], weights=(correctDirProb, slipProb, slipProb) ) ## get next state
+        if x+1 < grid.width and grid.grid[x+1][y].symbol != 'B':
+            value += correctDirProb * (state.cost + discount * max(grid.grid[x+1][y].qvalues.values()) )
+        else:
+            value += correctDirProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
+        if y+1 >= 0 and grid.grid[x][y+1].symbol != 'B':
+            value += slipProb * (state.cost + discount * max(grid.grid[x][y+1].qvalues.values()) )
+        else:
+            value += slipProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) ) 
+        if y-1 >= 0 and grid.grid[x][y-1].symbol != 'B':
+            value += correctDirProb * (state.cost + discount * max(grid.grid[x][y-1].qvalues.values()) )
+        else:
+            value += correctDirProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
+    else: # direction == 'W': # probability, utility, 1-probability, utility
+        nextDir = random.choices(['W', 'N', 'S'], weights=(correctDirProb, slipProb, slipProb) ) ## get next state
+        if x-1 >= 0 and grid.grid[x-1][y].symbol != 'B':
+            value += correctDirProb * (state.cost + discount * max(grid.grid[x-1][y].qvalues.values()) )
+        else:
+            value += correctDirProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
+        if y-1 >= 0 and grid.grid[x][y-1].symbol != 'B':
+            value += slipProb * (state.cost + discount * max(grid.grid[x][y-1].qvalues.values()) )
+        else:
+            value += slipProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) ) 
+        if y+1 < grid.width and grid.grid[x][y+1].symbol != 'B':
+            value += slipProb * (state.cost + discount * max(grid.grid[x][y+1].qvalues.values()) )
+        else:
+            value += slipProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
 
     
     # print(f"max: {max(state.qvalues, key=state.qvalues.get)}")
     # bestPolicy = max(state.qvalues, key=state.qvalues.get)
-    return [value, '_']
+    return [value, str(nextDir[0])]
     
 
 def episode(grid):
     # North, South, East, West
     directions = ['N','E','S','W']
 
-    currState = grid.startState
-    nextState = currState
+    currState = grid.grid[int(grid.startState[0])][int(grid.startState[1])]
+    stateLocation = [int(grid.startState[0]), int(grid.startState[1]) ]
     done = False
     while not done:
-        direction = random.choice(directions)
-        bestQValue, stateSymbol = qValueCalculation(currState, grid, direction)
         
-        x = int(currState[0])
-        y = int(currState[1])
-        currState = grid.grid[x][y]
-
-        # need it to actually give back which direction it went in order to proceed with learning
-        
-        if direction == 'N':
-            currState.qvalues['N'] = bestQValue
-            currState = [x,y-1]
-        elif direction == 'S':
-            currState.qvalues['S'] = bestQValue
-        elif direction == 'E':
-            currState.qvalues['E'] = bestQValue
-        elif direction == 'W':
-            currState.qvalues['W'] = bestQValue
-        
-
-        if stateSymbol == 'T':
+        if currState.symbol == 'T':
+            currState.qvalues['EXIT'] = (currState.qvalues['EXIT'] + currState.cost) /2
             done = True
         else:
-            print(f"currrrrState: {currState}")
-            currState = [x,y] # plus whichever direction its supposed to go
+            direction = random.choice(directions)
+            bestQValue, nextDir = qValueCalculation(stateLocation, grid, direction)
+            #UPDATE the QVALUE
+            #Average of the current and the new ( curr+new / 2 )
+            if direction == 'N':
+                currState.qvalues['N'] = (currState.qvalues['N'] + bestQValue)/2
+            elif direction == 'S':
+                currState.qvalues['S'] = (currState.qvalues['S'] + bestQValue)/2
+            elif direction == 'E':
+                currState.qvalues['E'] = (currState.qvalues['E'] + bestQValue)/2
+            elif direction == 'W':
+                currState.qvalues['W'] = (currState.qvalues['W'] + bestQValue)/2
+            #Update the state
+            if nextDir == 'N':
+                stateLocation = [ stateLocation[0],  stateLocation[1] - 1]
+                currState = grid.grid[ stateLocation[0]][ stateLocation[1]]
+            elif nextDir == 'S':
+                stateLocation = [ stateLocation[0],  stateLocation[1] + 1]
+                currState = grid.grid[ stateLocation[0]][ stateLocation[1]]
+            elif nextDir == 'E':
+                stateLocation = [ stateLocation[0] + 1,  stateLocation[1]]
+                currState = grid.grid[stateLocation[0]][stateLocation[1]]
+            elif nextDir == 'W':
+                stateLocation = [ stateLocation[0] - 1,  stateLocation[1]]
+                currState = grid.grid[stateLocation[0]][stateLocation[1]]
+            print(f"Going: {nextDir}")
+            print(f"At state: {stateLocation}")
