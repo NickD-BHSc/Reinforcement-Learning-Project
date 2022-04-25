@@ -11,7 +11,7 @@ import random
 # TODOS:
 # getvalue function
 # results parsing and output
-# print grid graphical for qvalue in this version is behind
+# print grid graphical for qvalue in this version is behind most recent
 
 def getValue( state):
     pass
