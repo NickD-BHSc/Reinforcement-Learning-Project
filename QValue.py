@@ -1,6 +1,17 @@
+# COMP 4190: A3 - Reinforcement Learning
+# Instructor: Dr. Cuneyt G Akcora
+# Student Names and Numbers:
+# Aaron Salo - 7805174
+# Nicholas Duan - 7742401
 
 from sre_parse import State
 import random
+
+
+# TODOS:
+# getvalue function
+# results parsing and output
+# print grid graphical for qvalue in this version is behind most recent
 
 def getValue( state):
     pass
@@ -46,9 +57,6 @@ def update(state, location, grid, action, reward):
         nextState = grid.grid[nextLocation[0]][nextLocation[1]]
     return nextState, nextLocation
 
-# sooo, random for first few episodes. then getpolicy based on MAX qvalue. 
-# then if theres negative values, it's worthwhile for agent to 'explore places it hasn't yet' 
-# i.e. 0 value qvalue. so pick based on q values, then based on random if there are 0.0 ties
 def getQValue(currState, grid, direction):
     x = int(currState[0])
     y = int(currState[1])
@@ -86,14 +94,11 @@ def getQValue(currState, grid, direction):
         else:
             value += correctDirProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
 
-    
-    # print(f"max: {max(state.qvalues, key=state.qvalues.get)}")
-    # bestPolicy = max(state.qvalues, key=state.qvalues.get)
     return [value, str(nextDir[0])]
     
 
 def episode(grid):
-    # North, South, East, West
+    # North, East, South, West
     directions = ['N','E','S','W']
 
     currState = grid.grid[int(grid.startState[0])][int(grid.startState[1])]

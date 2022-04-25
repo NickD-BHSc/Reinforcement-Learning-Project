@@ -1,3 +1,9 @@
+# COMP 4190: A3 - Reinforcement Learning
+# Instructor: Dr. Cuneyt G Akcora
+# Student Names and Numbers:
+# Aaron Salo - 7805174
+# Nicholas Duan - 7742401
+
 import sys
 import re
 from states import State, Boulder, Terminal
@@ -31,10 +37,10 @@ class Grid():
             for j in range(self.width):
                 state = self.grid[j][self.height-1 - i]
                 if state.symbol == 'B':
-                    result += 'B  : , '
+                    result += 'B:    , '
                 else:
-                    value = state.utility
-                    result += f'{value:.2f}:'+ state.policy + ', '
+                    value = "{:.2f}".format(round(state.utility, 2))
+                    result += str(value) + ':'+ state.policy + ', '
             result += ']\n'
         print(result)
 
