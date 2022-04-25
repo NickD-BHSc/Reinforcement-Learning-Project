@@ -2,27 +2,56 @@
 from sre_parse import State
 import random
 
-def getQValue(state, action):
-    pass
-
-
 def getValue( state):
     pass
 
+def isValidLocation(grid, dir, x, y):
+    if dir == 'N':
+        return  y+1 < grid.height and grid.grid[x][y+1].symbol != 'B'
+    elif dir == 'S':
+        return y-1 >= 0 and grid.grid[x][y-1].symbol != 'B'
+    elif dir == 'W':
+        return x-1 >= 0 and grid.grid[x-1][y].symbol != 'B'
+    elif dir == 'E':
+        return x+1 < grid.width and grid.grid[x+1][y].symbol != 'B'
+    
+
 #return max of all Qvalues
 def getPolicy(state):
-    maximum = 'N'
-    for i in state.qvalues:
-        i
-    return max(state.qvalues.values() )
+    return max(state.qvalues, key=state.qvalues.get)
 
-def update(state, action, nextState, reward):
-    pass
+def update(state, location, grid, action, reward):
+    if action == 'N':
+        state.qvalues['N'] = (state.qvalues['N'] + reward)/2
+    elif action == 'S':
+        state.qvalues['S'] = (state.qvalues['S'] + reward)/2
+    elif action == 'E':
+        state.qvalues['E'] = (state.qvalues['E'] + reward)/2
+    elif action == 'W':
+        state.qvalues['W'] = (state.qvalues['W'] + reward)/2
+    print(f"REWARD IS {reward}")
+    print()
+    #Update the state
+    if action == 'S':
+        nextLocation = [ location[0],  location[1] - 1]
+    elif action == 'N':
+        nextLocation = [ location[0],  location[1] + 1]
+    elif action == 'E':
+        nextLocation = [ location[0] + 1,  location[1]]
+    elif action == 'W':
+        nextLocation = [ location[0] - 1,  location[1]]
+    
+    if not isValidLocation(grid, action, location[0], location[1]):
+        nextState = state
+        nextLocation = location
+    else:
+        nextState = grid.grid[nextLocation[0]][nextLocation[1]]
+    return nextState, nextLocation
 
 # sooo, random for first few episodes. then getpolicy based on MAX qvalue. 
 # then if theres negative values, it's worthwhile for agent to 'explore places it hasn't yet' 
 # i.e. 0 value qvalue. so pick based on q values, then based on random if there are 0.0 ties
-def qValueCalculation(currState, grid, direction):
+def getQValue(currState, grid, direction):
     x = int(currState[0])
     y = int(currState[1])
     state = grid.grid[x][y]
@@ -34,10 +63,10 @@ def qValueCalculation(currState, grid, direction):
     
 
     # South
-    if direction == 'S': # probability, utility, 1-probability, utility
-        nextDir = random.choices(['S', 'E', 'W'], weights=(correctDirProb, slipProb, slipProb) ) ## get next state
-        if y-1 >= 0 and grid.grid[x][y-1].symbol != 'B':
-            value += correctDirProb * (state.cost + discount * max(grid.grid[x][y-1].qvalues.values()) )
+    if direction == 'N': # probability, utility, 1-probability, utility
+        nextDir = random.choices(['N', 'E', 'W'], weights=(correctDirProb, slipProb, slipProb) ) ## get next state
+        if y+1 < grid.height and grid.grid[x][y+1].symbol != 'B':
+            value += correctDirProb * (state.cost + discount * max(grid.grid[x][y+1].qvalues.values()) )
         else:
             value += correctDirProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
         if x-1 >= 0 and grid.grid[x-1][y].symbol != 'B':
@@ -48,8 +77,8 @@ def qValueCalculation(currState, grid, direction):
             value += slipProb * (state.cost + discount * max(grid.grid[x+1][y].qvalues.values()) )
         else:
             value += slipProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
-    elif direction == 'N': # probability, utility, 1-probability, utility
-        nextDir = random.choices(['N', 'E', 'W'], weights=(correctDirProb, slipProb, slipProb) ) ## get next state
+    elif direction == 'S': # probability, utility, 1-probability, utility
+        nextDir = random.choices(['S', 'E', 'W'], weights=(correctDirProb, slipProb, slipProb) ) ## get next state
         if y-1 >= 0 and grid.grid[x][y-1].symbol != 'B':
             value += correctDirProb * (state.cost + discount * max(grid.grid[x][y-1].qvalues.values()) )
         else:
@@ -68,7 +97,7 @@ def qValueCalculation(currState, grid, direction):
             value += correctDirProb * (state.cost + discount * max(grid.grid[x+1][y].qvalues.values()) )
         else:
             value += correctDirProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
-        if y+1 >= 0 and grid.grid[x][y+1].symbol != 'B':
+        if y+1 < grid.height and grid.grid[x][y+1].symbol != 'B':
             value += slipProb * (state.cost + discount * max(grid.grid[x][y+1].qvalues.values()) )
         else:
             value += slipProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) ) 
@@ -86,7 +115,7 @@ def qValueCalculation(currState, grid, direction):
             value += slipProb * (state.cost + discount * max(grid.grid[x][y-1].qvalues.values()) )
         else:
             value += slipProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) ) 
-        if y+1 < grid.width and grid.grid[x][y+1].symbol != 'B':
+        if y+1 < grid.height and grid.grid[x][y+1].symbol != 'B':
             value += slipProb * (state.cost + discount * max(grid.grid[x][y+1].qvalues.values()) )
         else:
             value += slipProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
@@ -110,30 +139,12 @@ def episode(grid):
             currState.qvalues['EXIT'] = (currState.qvalues['EXIT'] + currState.cost) /2
             done = True
         else:
-            direction = random.choice(directions)
-            bestQValue, nextDir = qValueCalculation(stateLocation, grid, direction)
+            direction = input("Input direction") #random.choice(directions)
+            bestQValue, nextDir = getQValue(stateLocation, grid, direction)
             #UPDATE the QVALUE
             #Average of the current and the new ( curr+new / 2 )
-            if direction == 'N':
-                currState.qvalues['N'] = (currState.qvalues['N'] + bestQValue)/2
-            elif direction == 'S':
-                currState.qvalues['S'] = (currState.qvalues['S'] + bestQValue)/2
-            elif direction == 'E':
-                currState.qvalues['E'] = (currState.qvalues['E'] + bestQValue)/2
-            elif direction == 'W':
-                currState.qvalues['W'] = (currState.qvalues['W'] + bestQValue)/2
-            #Update the state
-            if nextDir == 'N':
-                stateLocation = [ stateLocation[0],  stateLocation[1] - 1]
-                currState = grid.grid[ stateLocation[0]][ stateLocation[1]]
-            elif nextDir == 'S':
-                stateLocation = [ stateLocation[0],  stateLocation[1] + 1]
-                currState = grid.grid[ stateLocation[0]][ stateLocation[1]]
-            elif nextDir == 'E':
-                stateLocation = [ stateLocation[0] + 1,  stateLocation[1]]
-                currState = grid.grid[stateLocation[0]][stateLocation[1]]
-            elif nextDir == 'W':
-                stateLocation = [ stateLocation[0] - 1,  stateLocation[1]]
-                currState = grid.grid[stateLocation[0]][stateLocation[1]]
-            print(f"Going: {nextDir}")
-            print(f"At state: {stateLocation}")
+            currState, stateLocation = update(currState, stateLocation, grid, nextDir, bestQValue)
+            
+        print(f"At: {stateLocation}")
+        grid.printQvalue()
+        print()

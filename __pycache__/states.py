@@ -17,10 +17,9 @@ class State(object):
         #qvalue learning
         self.qvalues = {
             "N":0.0,
-            "E":1.0,
-            "S":2.0,
-            "W":3.0,
-            "EXIT":0.0
+            "E":0.0,
+            "S":0.0,
+            "W":0.0,
         }
 
     
@@ -39,6 +38,10 @@ class Terminal(State):
     def __init__(self, cost):
         super().__init__(cost)
         self.actions = ['EXIT'] 
+        
+        self.qvalues = {
+            "EXIT":0.0
+        }
 
 
 

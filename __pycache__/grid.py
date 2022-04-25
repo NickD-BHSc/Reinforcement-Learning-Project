@@ -64,23 +64,23 @@ class Grid():
                     elif i%4 == 1:
                         value = self.grid[x][flippedY].qvalues["N"]
                         color = WHITE
-                        if(value < 0):
+                        if(round(value, 2) < 0):
                             color = RED
-                        elif(value > 0):
+                        elif(round(value, 2) > 0):
                             color = GREEN
                         print(f"{BLUE}#{BLACK}_____{color}{value:.2f}{BLACK}_____ ", end='')
                     elif i%4 == 2:
                         value1 = self.grid[x][flippedY].qvalues["W"]
                         value2 = self.grid[x][flippedY].qvalues["E"]
                         color1 = WHITE
-                        if(value1 < 0):
+                        if(round(value1, 2)  < 0):
                             color1 = RED
-                        elif(value1 > 0):
+                        elif(round(value1, 2)  > 0):
                             color1 = GREEN
                         color2 = WHITE
-                        if(value1 < 0):
+                        if(round(value2, 2)  < 0):
                             color2 = RED
-                        elif(value1 > 0):
+                        elif(round(value2, 2)  > 0):
                             color2 = GREEN
                         print(f"{BLUE}# {color1}{value1:.2f}{BLACK}_____{color2}{value2:.2f}{BLACK} ", end='')
                     elif i%4 == 3:

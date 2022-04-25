@@ -13,14 +13,18 @@ def updateResults(k):
 def main():
     grid = setupGrid()
     
+    grid.printQvalue()
     k = 1 #grid.K
     iteration = 0
     print(f"grid start: {grid.startState}")
     episodes = 0
-    while episodes < 10:
-        print(f"Episode: {episodes}")
+    while episodes < 20:
         episode(grid)
+        print(f"Episode: {episodes}")
+        grid.printQvalue()
         episodes += 1
+        if episodes > 4:
+            print()
     
 
     while iteration < k:
