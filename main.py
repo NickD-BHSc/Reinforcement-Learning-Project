@@ -20,7 +20,7 @@ def main():
     grid = setupGrid()
     
     
-    k = 1 #grid.K
+    k = grid.K
     iteration = 0
     print(f"grid start: {grid.startState}")
     episodes = 0

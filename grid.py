@@ -36,9 +36,10 @@ class Grid():
             for j in range(self.width):
                 state = self.grid[j][self.height-1 - i]
                 if state.symbol == 'B':
-                    result += 'B: , '
+                    result += 'B:    , '
                 else:
-                    result += str(round(state.utility, 2)) + ':'+ state.policy + ', '
+                    value = "{:.2f}".format(round(state.utility, 2))
+                    result += str(value) + ':'+ state.policy + ', '
             result += ']\n'
         print(result)
 
