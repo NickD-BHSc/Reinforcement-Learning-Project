@@ -26,6 +26,7 @@ In root directory, please Run
 
 
 We programmed our own graphical representation (extraneous to provided gui and instructions for this assignment), to provide convenience in showing ValueIteration and Q-Value Learning values. Formatting was tested for values up to 3 significant figures (additional significant figures might result in slightly warped graphical representation).
+NOTE: to see the graphical representation at the episode/k step queried, please set the K or Episodes variable in the `gridConf.txt` to the step queried + 1 (because we start counting at 0)
 
 ## Value Iteration values:
 Are provided with [optimalValue : optimalDirection] pairing, (ex. `0.8:N`). Directions are `N: North`, `E: East`, `S: South`, `W: West`
