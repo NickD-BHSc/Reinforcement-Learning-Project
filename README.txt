@@ -23,7 +23,7 @@ In root directory, please Run
 We programmed our own graphical representation (extraneous to provided gui and instructions for this assignment), to provide convenience in showing ValueIteration and Q-Value Learning values. Formatting was tested for values up to 3 decimal places (additional significant figures might result in slightly warped figure).
 
 ## Value Iteration values:
-Are provided with [optimal value:optimal direction] pairing, (ex. `0.8:N`).
+Are provided with [optimal value:optimal direction] pairing, (ex. `0.8:N`). Directions are `N: North`, `E: East`, `S: South`, `W: West`
 Cells with boulders do not have a [optimal value:optimal direction] pair, rather they are depicted with `B: ,`. Terminal states also do not have a [optimal value:optimal direction] pair, rather they are dipected with just their terminal value (defined in the grid configuration file) (ex. `1: ,`).
 
 ## Q-Value Learning values:
@@ -34,4 +34,29 @@ example:
 (for West) `0.4`     `0.5` (for East)
                 `0.2` (for South)
 
+
+# Note:
+The contents in the gridfile.txt MUST follow the layout provided in the assignment instruction details:
+
+x=4
+
+y=3
+
+Terminal={1={3,1,-1},2={3,2,1}}           // if no terminal states, please provide empty set Terminal={}
+
+Boulder={1={1,1}}                         // if no boulder states, please provide empty set Boulder={}
+
+RobotStartState={0,0}                     // if no robotstart state, please provide empty set RobotStartState={}
+
+K=1000
+
+Episodes=3500
+
+alpha=0.2
+
+Discount=0.9
+
+Noise=0.2
+
+TransitionCost=0
 
