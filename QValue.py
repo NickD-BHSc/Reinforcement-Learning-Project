@@ -13,8 +13,6 @@ import random
 # results parsing and output
 # print grid graphical for qvalue in this version is behind most recent
 
-def getValue( state):
-    pass
 
 def isValidLocation(grid, dir, x, y):
     if dir == 'N':
@@ -57,7 +55,12 @@ def update(state, location, grid, action, reward):
         nextState = grid.grid[nextLocation[0]][nextLocation[1]]
     return nextState, nextLocation
 
-def getQValue(currState, grid, direction):
+
+def getQValue(x, y, state, discount, probability, grid):
+    return probability * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
+
+
+def getValue(currState, grid, direction):
     x = int(currState[0])
     y = int(currState[1])
     state = grid.grid[x][y]
@@ -72,27 +75,27 @@ def getQValue(currState, grid, direction):
     if direction == 'N': # probability, utility, 1-probability, utility
         nextDir = random.choices(['N', 'E', 'W'], weights=(correctDirProb, slipProb, slipProb) ) ## get next state
         if y+1 < grid.height and grid.grid[x][y+1].symbol != 'B':
-            value += correctDirProb * (state.cost + discount * max(grid.grid[x][y+1].qvalues.values()) )
+            value = getQValue(x, y+1, state, discount, correctDirProb, grid)
         else:
-            value += correctDirProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
+            value = getQValue(x, y, state, discount, correctDirProb, grid)
     elif direction == 'S': # probability, utility, 1-probability, utility
         nextDir = random.choices(['S', 'E', 'W'], weights=(correctDirProb, slipProb, slipProb) ) ## get next state
         if y-1 >= 0 and grid.grid[x][y-1].symbol != 'B':
-            value += correctDirProb * (state.cost + discount * max(grid.grid[x][y-1].qvalues.values()) )
+            value = getQValue(x, y-1, state, discount, correctDirProb, grid)
         else:
-            value += correctDirProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
+            value = getQValue(x, y, state, discount, correctDirProb, grid)
     elif direction == 'E': # probability, utility, 1-probability, utility
         nextDir = random.choices(['E', 'S', 'N'], weights=(correctDirProb, slipProb, slipProb) ) ## get next state
         if x+1 < grid.width and grid.grid[x+1][y].symbol != 'B':
-            value += correctDirProb * (state.cost + discount * max(grid.grid[x+1][y].qvalues.values()) )
+            value = getQValue(x+1, y, state, discount, correctDirProb, grid)
         else:
-            value += correctDirProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
+            value = getQValue(x, y, state, discount, correctDirProb, grid)
     else: # direction == 'W': # probability, utility, 1-probability, utility
         nextDir = random.choices(['W', 'N', 'S'], weights=(correctDirProb, slipProb, slipProb) ) ## get next state
         if x-1 >= 0 and grid.grid[x-1][y].symbol != 'B':
-            value += correctDirProb * (state.cost + discount * max(grid.grid[x-1][y].qvalues.values()) )
+            value = getQValue(x-1, y, state, discount, correctDirProb, grid)
         else:
-            value += correctDirProb * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
+            value = getQValue(x, y, state, discount, correctDirProb, grid)
 
     return [value, str(nextDir[0])]
     
@@ -111,7 +114,7 @@ def episode(grid):
             done = True
         else:
             direction = random.choice(directions)
-            bestQValue, nextDir = getQValue(stateLocation, grid, direction)
+            bestQValue, nextDir = getValue(stateLocation, grid, direction)
             #UPDATE the QVALUE
             #Average of the current and the new ( curr+new / 2 )
             currState, stateLocation = update(currState, stateLocation, grid, nextDir, bestQValue)

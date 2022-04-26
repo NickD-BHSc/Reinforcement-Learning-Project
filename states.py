@@ -17,7 +17,6 @@ class State(object):
         self.utility = 0
 
         #value iteration
-        self.optimalValue = 0.0
         self.policy = 'N'
 
         #qvalue learning
@@ -28,7 +27,20 @@ class State(object):
             "W":0.0,
         }
 
+
+    def stateValue(self):
+        return self.utility
     
+
+    def bestPolicy(self):
+        return self.policy
+
+    def bestQValue(self):
+        return max(self.qvalues.values())
+
+    def bestQPolicy(self):
+        return max(self.qvalues, key=self.qvalues.get)
+
     #toString function
     def __str__(self):
          return self.symbol

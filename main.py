@@ -9,28 +9,14 @@ from states import State, Boulder, Terminal
 from grid import Grid, setupGrid
 from ValueIteration import bellman
 from QValue import episode
-
-def updateResults(k):
-    pass
-
-# def qValueLearning():
+from results import Results
 
 
 def main():
     grid = setupGrid()
-    
+    results = Results()
     
     print(f"Robot starting at: {grid.startState}")
-
-    maxEpisodes = grid.Episodes
-    episodes = 0
-    print("Running QValue Learning...")
-    while episodes < maxEpisodes:
-        episode(grid)
-        episodes += 1
-
-    grid.printQvalue()
-    
 
     k = grid.K
     iteration = 0
@@ -42,10 +28,27 @@ def main():
                 state = grid.grid[x][y]
                 for a in state.actions:
                     [state.utility, state.policy] = bellman(state, grid, x, y)
-        updateResults(k)
+        results.checkResults(iteration, "MDP", grid)
         iteration += 1
-
     grid.printUtility()
+
+
+
+    maxEpisodes = grid.Episodes
+    episodes = 0
+    print("Running QValue Learning...")
+    while episodes < maxEpisodes:
+        episode(grid)
+        results.checkResults(episodes, "RL", grid)
+        episodes += 1
+
+    grid.printQvalue()
+    
+
+
+
+    print("results are:")
+    print(results)
     
 directions = [[0,-1],[0,1],[1,0],[-1,0]]
 

@@ -138,12 +138,12 @@ def setupGrid():
     if len(sys.argv) > 1:
         fileName = sys.argv[1]
 
-    print(f"Solving puzzles in file: gridFiles/{fileName}.txt")
+    print(f"Solving puzzles in file: {fileName}.txt")
     try:
-        filePath = "gridFiles/" + fileName + ".txt"
+        filePath = fileName + ".txt"
         file = open(filePath)
     except FileNotFoundError:
-        print(f"Couldn't find file gridFiles/{fileName}.txt.... Please try again.")
+        print(f"\033[0;31mCouldn't find file {fileName}.txt.... Please try again.\033[0;37m")
         exit()
 
 
