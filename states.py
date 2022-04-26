@@ -3,10 +3,12 @@
 # Student Names and Numbers:
 # Aaron Salo - 7805174
 # Nicholas Duan - 7742401
+# Aim: Implement Value Iteration and Q-Value learning algorithms to train an agent to navigate a grid world
 
 import enum as Enum
 from re import X
 
+# states class to help us get state values
 class State(object):
 
     symbol = '_'
@@ -27,10 +29,8 @@ class State(object):
             "W":0.0,
         }
 
-
     def stateValue(self):
-        return self.utility
-    
+        return self.utility   
 
     def bestPolicy(self):
         return self.policy
@@ -60,7 +60,6 @@ class Terminal(State):
         self.qvalues = {
             "EXIT":0.0
         }
-
 
 
 class Boulder(State):

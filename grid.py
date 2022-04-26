@@ -3,11 +3,13 @@
 # Student Names and Numbers:
 # Aaron Salo - 7805174
 # Nicholas Duan - 7742401
+# Aim: Implement Value Iteration and Q-Value learning algorithms to train an agent to navigate a grid world
 
 import sys
 import re
 from states import State, Boulder, Terminal
 
+# utility class to help us setup grid and get grid values
 class Grid():
 
     def __init__(self, grid, width, height, startState, K, Episodes, discount, noise, alpha):
@@ -31,6 +33,7 @@ class Grid():
     def getGrid(self):
         return self.grid
 
+    # extra graphical representation as stated in README
     def printUtility(self):
         result = ''
         for i in range(self.height):
@@ -45,6 +48,7 @@ class Grid():
             result += ']\n'
         print(result)
 
+    # extra graphical representation as stated in README
     def printQvalue(self):
         RED='\033[0;31m'
         GREEN='\033[0;32m'

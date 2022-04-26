@@ -3,17 +3,13 @@
 # Student Names and Numbers:
 # Aaron Salo - 7805174
 # Nicholas Duan - 7742401
+# Aim: Implement Value Iteration and Q-Value learning algorithms to train an agent to navigate a grid world
 
 from sre_parse import State
 import random
 
-
-# TODOS:
-# getvalue function
-# results parsing and output
-# print grid graphical for qvalue in this version is behind most recent
-
-
+# IsValidLocation: checks if next location is valid. Takes in the grid, the direction, the x/y-coordinates.
+# Returns whether or not the location is valid (not a boulder, not outside the grid)
 def isValidLocation(grid, dir, x, y):
     if dir == 'N':
         return  y+1 < grid.height and grid.grid[x][y+1].symbol != 'B'
@@ -25,10 +21,13 @@ def isValidLocation(grid, dir, x, y):
         return x+1 < grid.width and grid.grid[x+1][y].symbol != 'B'
     
 
-#return max of all Qvalues
+# getPolicy: computes the best action to take in a state. Takes in the state.
+# Returns best action to take in state
 def getPolicy(state):
     return max(state.qvalues, key=state.qvalues.get)
 
+# update: performs q-value update for the state. Takes in state, location, grid, action, reward.
+# Returns the next state and its location
 def update(state, location, grid, action, reward):
     if action == 'N':
         state.qvalues['N'] = (state.qvalues['N'] + reward)/2
@@ -55,11 +54,13 @@ def update(state, location, grid, action, reward):
         nextState = grid.grid[nextLocation[0]][nextLocation[1]]
     return nextState, nextLocation
 
-
+# getQValue: computes q. Takes in the x/y-coordinates, state, discount, probability, grid.
+# Returns q
 def getQValue(x, y, state, discount, probability, grid):
     return probability * (state.cost + discount * max(grid.grid[x][y].qvalues.values()) )
 
-
+# getValue: computes the max action q over legal actions. Takes in the current state, grid, direction to look.
+# returns max action Q over legal actions and the direction
 def getValue(currState, grid, direction):
     x = int(currState[0])
     y = int(currState[1])
@@ -70,28 +71,26 @@ def getValue(currState, grid, direction):
     discount = grid.discount
     value = 0
     
-
-    # South
-    if direction == 'N': # probability, utility, 1-probability, utility
-        nextDir = random.choices(['N', 'E', 'W'], weights=(correctDirProb, slipProb, slipProb) ) ## get next state
+    if direction == 'N':
+        nextDir = random.choices(['N', 'E', 'W'], weights=(correctDirProb, slipProb, slipProb) )
         if y+1 < grid.height and grid.grid[x][y+1].symbol != 'B':
             value = getQValue(x, y+1, state, discount, correctDirProb, grid)
         else:
             value = getQValue(x, y, state, discount, correctDirProb, grid)
-    elif direction == 'S': # probability, utility, 1-probability, utility
-        nextDir = random.choices(['S', 'E', 'W'], weights=(correctDirProb, slipProb, slipProb) ) ## get next state
+    elif direction == 'S':
+        nextDir = random.choices(['S', 'E', 'W'], weights=(correctDirProb, slipProb, slipProb) )
         if y-1 >= 0 and grid.grid[x][y-1].symbol != 'B':
             value = getQValue(x, y-1, state, discount, correctDirProb, grid)
         else:
             value = getQValue(x, y, state, discount, correctDirProb, grid)
-    elif direction == 'E': # probability, utility, 1-probability, utility
-        nextDir = random.choices(['E', 'S', 'N'], weights=(correctDirProb, slipProb, slipProb) ) ## get next state
+    elif direction == 'E':
+        nextDir = random.choices(['E', 'S', 'N'], weights=(correctDirProb, slipProb, slipProb) )
         if x+1 < grid.width and grid.grid[x+1][y].symbol != 'B':
             value = getQValue(x+1, y, state, discount, correctDirProb, grid)
         else:
             value = getQValue(x, y, state, discount, correctDirProb, grid)
-    else: # direction == 'W': # probability, utility, 1-probability, utility
-        nextDir = random.choices(['W', 'N', 'S'], weights=(correctDirProb, slipProb, slipProb) ) ## get next state
+    else:
+        nextDir = random.choices(['W', 'N', 'S'], weights=(correctDirProb, slipProb, slipProb) )
         if x-1 >= 0 and grid.grid[x-1][y].symbol != 'B':
             value = getQValue(x-1, y, state, discount, correctDirProb, grid)
         else:
@@ -99,7 +98,8 @@ def getValue(currState, grid, direction):
 
     return [value, str(nextDir[0])]
     
-
+# getNextDir: chooses the next direction for the agent to go. Takes in grid, state.
+# Returns the next direction for the agent to go.
 def getNextDir(grid, state):
     sort = sorted(state.qvalues.items(), key=lambda x: x[1])
     alpha = grid.alpha
@@ -107,21 +107,17 @@ def getNextDir(grid, state):
     choice = random.choices(sort, weights=(rand, rand, rand, alpha) )[0]
     return choice[0]
 
+# episode: Run an episode of RL algorithm until we exit from a terminal state. Takes in the grid.
 def episode(grid):
-    # North, East, South, West
-
     currState = grid.grid[int(grid.startState[0])][int(grid.startState[1])]
     stateLocation = [int(grid.startState[0]), int(grid.startState[1]) ]
     done = False
     while not done:
-        
         if currState.symbol == 'T':
             currState.qvalues['EXIT'] = (currState.qvalues['EXIT'] + currState.cost) /2
             done = True
         else:
             direction = getNextDir(grid, currState)
             bestQValue, nextDir = getValue(stateLocation, grid, direction)
-            #UPDATE the QVALUE
-            #Average of the current and the new ( curr+new / 2 )
             currState, stateLocation = update(currState, stateLocation, grid, nextDir, bestQValue)
             

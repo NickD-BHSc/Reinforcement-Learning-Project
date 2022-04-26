@@ -1,5 +1,13 @@
+# COMP 4190: A3 - Reinforcement Learning
+# Instructor: Dr. Cuneyt G Akcora
+# Student Names and Numbers:
+# Aaron Salo - 7805174
+# Nicholas Duan - 7742401
+# Aim: Implement Value Iteration and Q-Value learning algorithms to train an agent to navigate a grid world
+
 import sys
 
+# results class to help us return results values
 class Results:
     
     X = 0
@@ -29,13 +37,12 @@ class Results:
             query = line.strip().split(',')
             self.queries.append(query)
 
-
-
+    # parse results.txt for queries to answer
     def checkResults(self, step, method, grid):
         for query in self.queries:
             if method == query[self.METHOD] :
                 if int(step) == int(query[self.STEP]) :
-                    #ANSWER THE QUERY
+                    # answers the query
                     x = int(query[self.X])
                     y = int(query[self.Y])
                     if(x < grid.width and y < grid.height):
@@ -58,8 +65,6 @@ class Results:
                         else:
                             print("INVALID QUERY")
 
-
-    
     #toString function
     def __str__(self):
         message = ""
@@ -67,7 +72,7 @@ class Results:
             message = message + result + '\n'
         return message
     
-    #another toString function (idk its some python stuff)
+    #another toString function
     def __repr__(self):
         message = ""
         for result in self.results:
