@@ -100,9 +100,15 @@ def getValue(currState, grid, direction):
     return [value, str(nextDir[0])]
     
 
+def getNextDir(grid, state):
+    sort = sorted(state.qvalues.items(), key=lambda x: x[1])
+    alpha = grid.alpha
+    rand = (1-alpha)/3
+    choice = random.choices(sort, weights=(rand, rand, rand, alpha) )[0]
+    return choice[0]
+
 def episode(grid):
     # North, East, South, West
-    directions = ['N','E','S','W']
 
     currState = grid.grid[int(grid.startState[0])][int(grid.startState[1])]
     stateLocation = [int(grid.startState[0]), int(grid.startState[1]) ]
@@ -113,7 +119,7 @@ def episode(grid):
             currState.qvalues['EXIT'] = (currState.qvalues['EXIT'] + currState.cost) /2
             done = True
         else:
-            direction = random.choice(directions)
+            direction = getNextDir(grid, currState)
             bestQValue, nextDir = getValue(stateLocation, grid, direction)
             #UPDATE the QVALUE
             #Average of the current and the new ( curr+new / 2 )

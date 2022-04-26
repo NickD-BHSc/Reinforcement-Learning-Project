@@ -10,13 +10,14 @@ from states import State, Boulder, Terminal
 
 class Grid():
 
-    def __init__(self, grid, width, height, startState, K, Episodes, discount, noise):
+    def __init__(self, grid, width, height, startState, K, Episodes, discount, noise, alpha):
         self.grid = grid
         self.width = width
         self.height = height     
         self.startState = startState
         self.K = K
         self.Episodes = Episodes
+        self.alpha = alpha
 
         self.noise = noise
         self.discount = discount
@@ -134,16 +135,16 @@ class Grid():
 
 #sets up the grid from a file
 def setupGrid():
-    fileName = "gridConf"
+    fileName = "gridConf.txt"
     if len(sys.argv) > 1:
         fileName = sys.argv[1]
 
-    print(f"Solving puzzles in file: {fileName}.txt")
+    print(f"Solving puzzles in file: {fileName}")
     try:
-        filePath = fileName + ".txt"
+        filePath = fileName
         file = open(filePath)
     except FileNotFoundError:
-        print(f"\033[0;31mCouldn't find file {fileName}.txt.... Please try again.\033[0;37m")
+        print(f"\033[0;31mCouldn't find file {fileName}.... Please try again.\033[0;37m")
         exit()
 
 
@@ -206,4 +207,4 @@ def setupGrid():
 
     file.close()
     
-    return Grid(grid, x, y, startState, K, Episodes, discount, noise)
+    return Grid(grid, x, y, startState, K, Episodes, discount, noise, alpha)

@@ -12,16 +12,16 @@ class Results:
         self.queries = []
         self.results = []
 
-        fileName = "results"
+        fileName = "results.txt"
         if len(sys.argv) > 1:
             fileName = sys.argv[2]
 
-        print(f"Looking at results in file {fileName}.txt")
+        print(f"Looking for queries in file {fileName}")
         try:
-            filePath = fileName + ".txt"
+            filePath = fileName
             file = open(filePath)
         except FileNotFoundError:
-            print(f"Couldn't find file {fileName}.txt.... Please try again.")
+            print(f"\033[0;31mCouldn't find file {fileName}.... Please try again.\033[0;37m")
             exit()
         
         Lines = file.readlines()

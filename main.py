@@ -13,6 +13,7 @@ from results import Results
 
 
 def main():
+    print("#####################################\n")
     grid = setupGrid()
     results = Results()
     
@@ -47,7 +48,7 @@ def main():
 
 
 
-    print("results are:")
+    print("\n\033[96mRESULTS:\033[0;37m")
     print(results)
     
 directions = [[0,-1],[0,1],[1,0],[-1,0]]
